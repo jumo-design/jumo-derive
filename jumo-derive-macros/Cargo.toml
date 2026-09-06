@@ -1,12 +1,12 @@
 [package]
-name = "moju-derive-macros"
+name = "jumo-derive-macros"
 version = "0.1.0"
 edition = "2021"
-description = "Proc-macro implementation for moju-derive: generates MoJuItem trait impls from #[derive(MoJu)]"
+description = "Proc-macro implementation for jumo-derive: generates JumoItem trait impls from #[derive(Jumo)]"
 license = "Apache-2.0"
-repository = "https://github.com/dayu-sec/moju-derive"
+repository = "https://github.com/dayu-sec/jumo-derive"
 readme = "../README.md"
-keywords = ["moju", "derive", "metadata", "proc-macro"]
+keywords = ["jumo", "derive", "metadata", "proc-macro"]
 categories = ["development-tools::procedural-macro-helpers"]
 
 [lib]

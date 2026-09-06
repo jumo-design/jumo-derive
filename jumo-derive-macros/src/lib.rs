@@ -2,7 +2,7 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, spanned::Spanned, Data, DeriveInput, Fields, Ident, LitStr, Meta};
 
-/// Parsed `#[moju(...)]` attributes on a type.
+/// Parsed `#[jumo(...)]` attributes on a type.
 #[derive(Default)]
 struct TypeAttr {
     kind: String,
@@ -17,12 +17,12 @@ struct TypeAttr {
     description: Option<String>,
 }
 
-/// Extract `#[moju(...)]` attributes from the type-level attribute list.
+/// Extract `#[jumo(...)]` attributes from the type-level attribute list.
 fn parse_type_attrs(attrs: &[syn::Attribute]) -> TypeAttr {
     let mut result = TypeAttr::default();
 
     for attr in attrs {
-        if !attr.path().is_ident("moju") {
+        if !attr.path().is_ident("jumo") {
             continue;
         }
 
@@ -51,7 +51,7 @@ fn parse_type_attrs(attrs: &[syn::Attribute]) -> TypeAttr {
                         other => {
                             return Err(syn::Error::new(
                                 meta.path.span(),
-                                format!("unknown moju attr: `{other}`"),
+                                format!("unknown jumo attr: `{other}`"),
                             ));
                         }
                     }
@@ -64,7 +64,7 @@ fn parse_type_attrs(attrs: &[syn::Attribute]) -> TypeAttr {
     result
 }
 
-/// Collect field idents that have `#[moju(unique)]`.
+/// Collect field idents that have `#[jumo(unique)]`.
 fn parse_field_unique_attrs(fields: &Fields) -> Vec<Ident> {
     let mut unique = Vec::new();
 
@@ -75,7 +75,7 @@ fn parse_field_unique_attrs(fields: &Fields) -> Vec<Ident> {
 
     for field in &named.named {
         for attr in &field.attrs {
-            if !attr.path().is_ident("moju") {
+            if !attr.path().is_ident("jumo") {
                 continue;
             }
             if let Meta::List(list) = &attr.meta {
@@ -101,8 +101,8 @@ fn to_lit_strs(idents: &[Ident]) -> Vec<LitStr> {
         .collect()
 }
 
-#[proc_macro_derive(MoJu, attributes(moju))]
-pub fn derive_moju(input: TokenStream) -> TokenStream {
+#[proc_macro_derive(Jumo, attributes(jumo))]
+pub fn derive_jumo(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let name = &input.ident;
     let (impl_generics, type_generics, where_clause) = input.generics.split_for_impl();
@@ -128,17 +128,17 @@ pub fn derive_moju(input: TokenStream) -> TokenStream {
             let description = opt_str(&attrs.description);
 
             let expanded = quote! {
-                impl #impl_generics ::moju_derive::MoJuItem for #name #type_generics #where_clause {
-                    fn moju_kind() -> &'static str { #kind }
-                    fn moju_domain() -> &'static str { #domain }
-                    fn moju_module() -> ::core::option::Option<&'static str> { #module }
-                    fn moju_role() -> ::core::option::Option<&'static str> { #role }
-                    fn moju_identity() -> ::core::option::Option<&'static str> { #identity }
-                    fn moju_tag() -> ::core::option::Option<&'static str> { #tag }
-                    fn moju_storage_kind() -> ::core::option::Option<&'static str> { #storage_kind }
-                    fn moju_durability() -> ::core::option::Option<&'static str> { #durability }
-                    fn moju_parent() -> ::core::option::Option<&'static str> { #parent }
-                    fn moju_description() -> ::core::option::Option<&'static str> { #description }
+                impl #impl_generics ::jumo_derive::JumoItem for #name #type_generics #where_clause {
+                    fn jumo_kind() -> &'static str { #kind }
+                    fn jumo_domain() -> &'static str { #domain }
+                    fn jumo_module() -> ::core::option::Option<&'static str> { #module }
+                    fn jumo_role() -> ::core::option::Option<&'static str> { #role }
+                    fn jumo_identity() -> ::core::option::Option<&'static str> { #identity }
+                    fn jumo_tag() -> ::core::option::Option<&'static str> { #tag }
+                    fn jumo_storage_kind() -> ::core::option::Option<&'static str> { #storage_kind }
+                    fn jumo_durability() -> ::core::option::Option<&'static str> { #durability }
+                    fn jumo_parent() -> ::core::option::Option<&'static str> { #parent }
+                    fn jumo_description() -> ::core::option::Option<&'static str> { #description }
                 }
             };
             return TokenStream::from(expanded);
@@ -166,28 +166,28 @@ pub fn derive_moju(input: TokenStream) -> TokenStream {
     };
 
     let expanded = quote! {
-        impl #impl_generics ::moju_derive::MoJuItem for #name #type_generics #where_clause {
-            fn moju_kind() -> &'static str { #kind }
+        impl #impl_generics ::jumo_derive::JumoItem for #name #type_generics #where_clause {
+            fn jumo_kind() -> &'static str { #kind }
 
-            fn moju_domain() -> &'static str { #domain }
+            fn jumo_domain() -> &'static str { #domain }
 
-            fn moju_module() -> ::core::option::Option<&'static str> { #module }
+            fn jumo_module() -> ::core::option::Option<&'static str> { #module }
 
-            fn moju_role() -> ::core::option::Option<&'static str> { #role }
+            fn jumo_role() -> ::core::option::Option<&'static str> { #role }
 
-            fn moju_identity() -> ::core::option::Option<&'static str> { #identity }
+            fn jumo_identity() -> ::core::option::Option<&'static str> { #identity }
 
-            fn moju_tag() -> ::core::option::Option<&'static str> { #tag }
+            fn jumo_tag() -> ::core::option::Option<&'static str> { #tag }
 
-            fn moju_storage_kind() -> ::core::option::Option<&'static str> { #storage_kind }
+            fn jumo_storage_kind() -> ::core::option::Option<&'static str> { #storage_kind }
 
-            fn moju_durability() -> ::core::option::Option<&'static str> { #durability }
+            fn jumo_durability() -> ::core::option::Option<&'static str> { #durability }
 
-            fn moju_parent() -> ::core::option::Option<&'static str> { #parent }
+            fn jumo_parent() -> ::core::option::Option<&'static str> { #parent }
 
-            fn moju_description() -> ::core::option::Option<&'static str> { #description }
+            fn jumo_description() -> ::core::option::Option<&'static str> { #description }
 
-            fn moju_unique_fields() -> &'static [&'static str] { #unique_tokens }
+            fn jumo_unique_fields() -> &'static [&'static str] { #unique_tokens }
         }
     };
 

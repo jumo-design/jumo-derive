@@ -1,16 +1,16 @@
 [workspace]
-members = [".", "moju-derive-macros"]
+members = [".", "jumo-derive-macros"]
 
 [package]
-name = "moju-derive"
+name = "jumo-derive"
 version = "0.1.2" #@gxl:set(version)
 edition = "2021"
-description = "Proc-macro crate for annotating Rust types with reviewed MoJu model metadata"
+description = "Proc-macro crate for annotating Rust types with reviewed Jumo model metadata"
 license = "Apache-2.0"
-repository = "https://github.com/dayu-sec/moju-derive"
+repository = "https://github.com/dayu-sec/jumo-derive"
 readme = "README.md"
-keywords = ["moju", "derive", "metadata", "proc-macro", "annotation"]
+keywords = ["jumo", "derive", "metadata", "proc-macro", "annotation"]
 categories = ["development-tools::procedural-macro-helpers"]
 
 [dependencies]
-moju-derive-macros = { version = "0.1.0", path = "moju-derive-macros" }
+jumo-derive-macros = { version = "0.1.0", path = "jumo-derive-macros" }
