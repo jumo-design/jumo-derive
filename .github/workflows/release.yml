@@ -32,15 +32,15 @@ jobs:
       - name: Cargo login
         if: ${{ !endsWith(github.ref, '-dryrun') }}
         run: echo "${{ secrets.CRATES_IO_TOKEN }}" | cargo login
-      - name: Cargo publish moju-derive-macros (dry run)
+      - name: Cargo publish jumo-derive-macros (dry run)
         if: ${{ endsWith(github.ref, '-dryrun') }}
-        run: cargo publish -p moju-derive-macros --dry-run
-      - name: Cargo publish moju-derive-macros
+        run: cargo publish -p jumo-derive-macros --dry-run
+      - name: Cargo publish jumo-derive-macros
         if: ${{ !endsWith(github.ref, '-dryrun') }}
-        run: cargo publish -p moju-derive-macros
-      - name: Cargo publish moju-derive (dry run)
+        run: cargo publish -p jumo-derive-macros
+      - name: Cargo publish jumo-derive (dry run)
         if: ${{ endsWith(github.ref, '-dryrun') }}
-        run: cargo publish -p moju-derive --dry-run
-      - name: Cargo publish moju-derive
+        run: cargo publish -p jumo-derive --dry-run
+      - name: Cargo publish jumo-derive
         if: ${{ !endsWith(github.ref, '-dryrun') }}
-        run: cargo publish -p moju-derive
+        run: cargo publish -p jumo-derive
