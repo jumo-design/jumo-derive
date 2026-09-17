@@ -29,7 +29,12 @@ enum OrderStatus {
 
 #[allow(dead_code)]
 #[derive(Debug, Jumo)]
-#[jumo(kind = "failure", identity = "payment.timeout", tag = "payment")]
+#[jumo(
+    kind = "failure",
+    domain = "Business",
+    identity = "payment.timeout",
+    tag = "payment"
+)]
 enum PaymentError {
     ProviderUnavailable,
     Timeout,
@@ -82,6 +87,7 @@ struct CustomerActor;
 #[derive(Debug, Jumo)]
 #[jumo(
     kind = "failure",
+    domain = "Business",
     identity = "db.timeout",
     tag = "db",
     description = "database operation timed out"
@@ -282,20 +288,6 @@ fn test_enum_optional_metadata_defaults_to_none() {
 // ---------------------------------------------------------------------------
 // attribute-list edge cases
 // ---------------------------------------------------------------------------
-
-#[allow(dead_code)]
-#[derive(Debug, Jumo)]
-#[jumo()]
-struct Unannotated;
-
-#[test]
-fn test_empty_attribute_falls_back_to_empty_strings() {
-    // Documented current semantics: `kind`/`domain` are not optional, but a
-    // missing value degrades to `""` instead of failing the build.
-    assert_eq!(Unannotated::jumo_kind(), "");
-    assert_eq!(Unannotated::jumo_domain(), "");
-    assert_eq!(Unannotated::jumo_id(), None);
-}
 
 #[allow(dead_code)]
 #[derive(Debug, Jumo)]

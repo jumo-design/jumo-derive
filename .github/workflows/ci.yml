@@ -23,7 +23,7 @@ jobs:
         with:
           toolchain: ${{ matrix.rust }}
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test --all-features -- --test-threads=1
+      - run: cargo test --workspace --all-features -- --test-threads=1
 
   fmt:
     name: Rustfmt
@@ -44,7 +44,7 @@ jobs:
         with:
           components: clippy
       - uses: Swatinem/rust-cache@v2
-      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
 
   docs:
     name: Doc Code
@@ -53,7 +53,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test --all-features --doc
+      - run: cargo test --workspace --all-features --doc
 
   security:
     name: Security Audit
