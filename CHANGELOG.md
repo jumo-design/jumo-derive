@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5] — Unreleased
+
+### Changed
+
+- The release workflow skips `jumo-derive-macros` when that version is already
+  on crates.io, instead of failing the job. Previously it aborted there and
+  `jumo-derive` itself was silently skipped, so a release could look published
+  on GitHub while nothing reached crates.io.
+
+### Fixed
+
+- `repository` now points at the real upstream, `jumo-design/jumo-derive`. The
+  previous value referenced a repository that does not exist.
+
 ## [0.1.4] — 2026-09-17
 
 ### Added
@@ -72,6 +86,7 @@ All notable changes to this project will be documented in this file.
   `jumo_domain()`.
 - CI and release workflows, and a test suite covering struct and enum patterns.
 
+[0.1.5]: https://github.com/jumo-design/jumo-derive/compare/v0.1.4...HEAD
 [0.1.4]: https://github.com/jumo-design/jumo-derive/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/jumo-design/jumo-derive/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/jumo-design/jumo-derive/compare/v0.1.1...v0.1.2
