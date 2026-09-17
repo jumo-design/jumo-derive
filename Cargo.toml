@@ -13,4 +13,4 @@ keywords = ["jumo", "derive", "metadata", "proc-macro", "annotation"]
 categories = ["development-tools::procedural-macro-helpers"]
 
 [dependencies]
-jumo-derive-macros = { version = "0.1.0", path = "jumo-derive-macros" }
+jumo-derive-macros = { version = "0.1.1", path = "jumo-derive-macros" }

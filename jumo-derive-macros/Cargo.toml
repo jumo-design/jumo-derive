@@ -1,6 +1,6 @@
 [package]
 name = "jumo-derive-macros"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Proc-macro implementation for jumo-derive: generates JumoItem trait impls from #[derive(Jumo)]"
 license = "Apache-2.0"
