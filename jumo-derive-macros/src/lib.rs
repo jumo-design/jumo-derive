@@ -5,6 +5,7 @@ use syn::{parse_macro_input, spanned::Spanned, Data, DeriveInput, Fields, Ident,
 /// Parsed `#[jumo(...)]` attributes on a type.
 #[derive(Default)]
 struct TypeAttr {
+    id: Option<String>,
     kind: String,
     domain: String,
     module: Option<String>,
@@ -31,6 +32,7 @@ fn parse_type_attrs(attrs: &[syn::Attribute]) -> TypeAttr {
                 if let Some(ident) = meta.path.get_ident() {
                     match ident.to_string().as_str() {
                         "kind" => result.kind = meta.value()?.parse::<LitStr>()?.value(),
+                        "id" => result.id = Some(meta.value()?.parse::<LitStr>()?.value()),
                         "domain" => result.domain = meta.value()?.parse::<LitStr>()?.value(),
                         "module" => result.module = Some(meta.value()?.parse::<LitStr>()?.value()),
                         "role" => result.role = Some(meta.value()?.parse::<LitStr>()?.value()),
@@ -118,6 +120,7 @@ pub fn derive_jumo(input: TokenStream) -> TokenStream {
             // No field-level unique for enums — emit impl and return early.
             let kind = &attrs.kind;
             let domain = &attrs.domain;
+            let id = opt_str(&attrs.id);
             let module = opt_str(&attrs.module);
             let role = opt_str(&attrs.role);
             let identity = opt_str(&attrs.identity);
@@ -129,6 +132,7 @@ pub fn derive_jumo(input: TokenStream) -> TokenStream {
 
             let expanded = quote! {
                 impl #impl_generics ::jumo_derive::JumoItem for #name #type_generics #where_clause {
+                    fn jumo_id() -> ::core::option::Option<&'static str> { #id }
                     fn jumo_kind() -> &'static str { #kind }
                     fn jumo_domain() -> &'static str { #domain }
                     fn jumo_module() -> ::core::option::Option<&'static str> { #module }
@@ -150,6 +154,7 @@ pub fn derive_jumo(input: TokenStream) -> TokenStream {
 
     let kind = &attrs.kind;
     let domain = &attrs.domain;
+    let id = opt_str(&attrs.id);
     let module = opt_str(&attrs.module);
     let role = opt_str(&attrs.role);
     let identity = opt_str(&attrs.identity);
@@ -167,6 +172,8 @@ pub fn derive_jumo(input: TokenStream) -> TokenStream {
 
     let expanded = quote! {
         impl #impl_generics ::jumo_derive::JumoItem for #name #type_generics #where_clause {
+            fn jumo_id() -> ::core::option::Option<&'static str> { #id }
+
             fn jumo_kind() -> &'static str { #kind }
 
             fn jumo_domain() -> &'static str { #domain }
