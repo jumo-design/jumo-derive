@@ -9,7 +9,7 @@ pub trait JumoItem {
     /// 稳定身份：模型条目的全名（如 `"Control.Gateway.Management.GatewayHealth"`）。
     ///
     /// 这是给工具用的**指针**：有了它，代码类型与模型条目的对应关系不再依赖
-    /// 类型名猜测（原名匹配对字母大小写、前后级差异都无能为力）。缺省 None 表示
+    /// 类型名猜测（原名匹配对字母大小写、前后缀差异都无能为力）。缺省 None 表示
     /// 该类型未声明 id，工具回落到名字匹配。
     fn jumo_id() -> Option<&'static str> {
         None

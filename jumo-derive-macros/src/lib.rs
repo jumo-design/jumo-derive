@@ -156,43 +156,13 @@ pub fn derive_jumo(input: TokenStream) -> TokenStream {
         Err(err) => return err.to_compile_error().into(),
     };
 
-    // syn 2.x: fields are inside `data`.  Enum has per-variant fields so we
-    // skip field-level unique collection for enums; struct/union have top-level
-    // named fields.
+    // syn 2.x: fields live inside `data`. Structs and unions have top-level
+    // named fields; enums hold their fields per variant, so there is no
+    // field-level `unique` to collect.
     let unique_fields = match &input.data {
         Data::Struct(s) => parse_field_unique_attrs(&s.fields),
-        Data::Enum(_) => {
-            // No field-level unique for enums — emit impl and return early.
-            let kind = &attrs.kind;
-            let domain = &attrs.domain;
-            let id = opt_str(&attrs.id);
-            let module = opt_str(&attrs.module);
-            let role = opt_str(&attrs.role);
-            let identity = opt_str(&attrs.identity);
-            let tag = opt_str(&attrs.tag);
-            let storage_kind = opt_str(&attrs.storage_kind);
-            let durability = opt_str(&attrs.durability);
-            let parent = opt_str(&attrs.parent);
-            let description = opt_str(&attrs.description);
-
-            let expanded = quote! {
-                impl #impl_generics ::jumo_derive::JumoItem for #name #type_generics #where_clause {
-                    fn jumo_id() -> ::core::option::Option<&'static str> { #id }
-                    fn jumo_kind() -> &'static str { #kind }
-                    fn jumo_domain() -> &'static str { #domain }
-                    fn jumo_module() -> ::core::option::Option<&'static str> { #module }
-                    fn jumo_role() -> ::core::option::Option<&'static str> { #role }
-                    fn jumo_identity() -> ::core::option::Option<&'static str> { #identity }
-                    fn jumo_tag() -> ::core::option::Option<&'static str> { #tag }
-                    fn jumo_storage_kind() -> ::core::option::Option<&'static str> { #storage_kind }
-                    fn jumo_durability() -> ::core::option::Option<&'static str> { #durability }
-                    fn jumo_parent() -> ::core::option::Option<&'static str> { #parent }
-                    fn jumo_description() -> ::core::option::Option<&'static str> { #description }
-                }
-            };
-            return TokenStream::from(expanded);
-        }
         Data::Union(u) => parse_field_unique_attrs(&Fields::Named(u.fields.clone())),
+        Data::Enum(_) => Vec::new(),
     };
 
     let unique_strs = to_lit_strs(&unique_fields);
