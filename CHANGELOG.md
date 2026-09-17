@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6] — Unreleased
+
+### Changed
+
+- Both crates now share a single version number: it is declared once under
+  `[workspace.package]` and inherited by `jumo-derive` and
+  `jumo-derive-macros`, together with `edition`, `license`, and `repository`.
+  A release can no longer publish one crate and skip the other.
+- `JumoItem` impls for enums are emitted through the same path as structs and
+  unions, removing a duplicated copy of the impl block. No behaviour change.
+- `syn` no longer enables the unused `full` and `extra-traits` features, which
+  trims the dependency build for consumers.
+
+### Fixed
+
+- The README documented only 9 of the 11 supported type-level keys; `id` and
+  `module` were missing. A new `Validation` section records the compile-time
+  checks introduced in 0.1.4.
+
 ## [0.1.5] — 2026-09-17
 
 ### Changed
@@ -86,6 +105,7 @@ All notable changes to this project will be documented in this file.
   `jumo_domain()`.
 - CI and release workflows, and a test suite covering struct and enum patterns.
 
+[0.1.6]: https://github.com/jumo-design/jumo-derive/compare/v0.1.5...HEAD
 [0.1.5]: https://github.com/jumo-design/jumo-derive/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/jumo-design/jumo-derive/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/jumo-design/jumo-derive/compare/v0.1.2...v0.1.3
