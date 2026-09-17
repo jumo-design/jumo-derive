@@ -32,12 +32,25 @@ jobs:
       - name: Cargo login
         if: ${{ !endsWith(github.ref, '-dryrun') }}
         run: echo "${{ secrets.CRATES_IO_TOKEN }}" | cargo login
+      - name: Check whether jumo-derive-macros is already on crates.io
+        id: macros
+        run: |
+          version=$(grep -m1 '^version' jumo-derive-macros/Cargo.toml | cut -d'"' -f2)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if curl -sSf https://index.crates.io/ju/mo/jumo-derive-macros | grep -q "\"vers\":\"$version\""; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Cargo publish jumo-derive-macros (dry run)
         if: ${{ endsWith(github.ref, '-dryrun') }}
         run: cargo publish -p jumo-derive-macros --dry-run
       - name: Cargo publish jumo-derive-macros
-        if: ${{ !endsWith(github.ref, '-dryrun') }}
+        if: ${{ !endsWith(github.ref, '-dryrun') && steps.macros.outputs.publish == 'true' }}
         run: cargo publish -p jumo-derive-macros
+      - name: Skip jumo-derive-macros (version already published)
+        if: ${{ !endsWith(github.ref, '-dryrun') && steps.macros.outputs.publish == 'false' }}
+        run: echo "jumo-derive-macros ${{ steps.macros.outputs.version }} is already on crates.io, skipping"
       - name: Cargo publish jumo-derive (dry run)
         if: ${{ endsWith(github.ref, '-dryrun') }}
         run: cargo publish -p jumo-derive --dry-run
