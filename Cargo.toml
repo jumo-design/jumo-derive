@@ -1,16 +1,31 @@
 [workspace]
 members = [".", "jumo-derive-macros"]
 
-[package]
-name = "jumo-derive"
+[workspace.package]
 version = "0.1.5" #@gxl:set(version)
 edition = "2021"
-description = "Proc-macro crate for annotating Rust types with reviewed Jumo model metadata"
 license = "Apache-2.0"
 repository = "https://github.com/jumo-design/jumo-derive"
+
+[package]
+name = "jumo-derive"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Proc-macro crate for annotating Rust types with reviewed Jumo model metadata"
 readme = "README.md"
 keywords = ["jumo", "derive", "metadata", "proc-macro", "annotation"]
 categories = ["development-tools::procedural-macro-helpers"]
 
 [dependencies]
-jumo-derive-macros = { version = "0.1.1", path = "jumo-derive-macros" }
+# 与 jumo-derive 同版本发布。cargo 不支持继承依赖的版本号，发 crates.io 时
+# 又必须给出一个版本要求，所以这里写一个只作下界的宽约束，避免每次发版都要
+# 改这一行。
+#
+# 不要给这行加 gxl 的 version 标记：patch_file 是 strict 模式，要求同一个标记在
+# 单个文件里只命中一处，两处会直接报 `marker=version, hits=2` 并使 bump flow
+# 失败（version.txt 已推进、manifest 未同步）。
+#
+# 主版本升到 0.2 时需要改这里（0.2.x 不满足 ^0.1），届时会报错而非静默失配。
+jumo-derive-macros = { version = "0.1", path = "jumo-derive-macros" }
