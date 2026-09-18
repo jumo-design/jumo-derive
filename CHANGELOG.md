@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.1.8] — Unreleased
 
 ### Fixed
 
@@ -132,7 +132,7 @@ All notable changes to this project will be documented in this file.
   `jumo_domain()`.
 - CI and release workflows, and a test suite covering struct and enum patterns.
 
-[Unreleased]: https://github.com/jumo-design/jumo-derive/compare/v0.1.7...HEAD
+[0.1.8]: https://github.com/jumo-design/jumo-derive/compare/v0.1.7...HEAD
 [0.1.7]: https://github.com/jumo-design/jumo-derive/compare/v0.1.6...v0.1.7
 [0.1.6]: https://github.com/jumo-design/jumo-derive/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/jumo-design/jumo-derive/compare/v0.1.4...v0.1.5
