@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- **`kind` is validated at compile time.** `#[jumo(kind = "...")]` used to accept
+  any string, so a typo such as `kind = "sturct"` compiled and only surfaced when
+  a tool read `jumo_kind()`. The accepted values are the `.mju` item kinds
+  (`struct`, `state`, `enum`, `variant`, `event`, `message`, `failure`, `cap`,
+  `actor`, `module`, `interface`, `storage`, `command`, `dataflow`, `lifecycle`,
+  `layer`, `dependency_rule`, `decision`, `failure_policy`, `flow`, `verify`,
+  `target`), and the error message lists all of them.
+
+### Fixed
+
+- `JumoItem::jumo_kind()` documented only 20 of the accepted kinds. `variant`
+  and `enum` were missing although both are in use across the workspace.
+  `enum` is a code-only spelling: the draft generator projects it back onto
+  `state`, so it carries no information a `.mju` model could round-trip.
+
 ## [0.1.6] — 2026-09-17
 
 ### Changed
@@ -105,6 +124,7 @@ All notable changes to this project will be documented in this file.
   `jumo_domain()`.
 - CI and release workflows, and a test suite covering struct and enum patterns.
 
+[Unreleased]: https://github.com/jumo-design/jumo-derive/compare/v0.1.6...HEAD
 [0.1.6]: https://github.com/jumo-design/jumo-derive/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/jumo-design/jumo-derive/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/jumo-design/jumo-derive/compare/v0.1.3...v0.1.4
