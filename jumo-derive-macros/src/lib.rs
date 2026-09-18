@@ -18,12 +18,43 @@ struct TypeAttr {
     description: Option<String>,
 }
 
+/// `.mju` item kinds a `kind = "..."` value may declare.
+///
+/// Mirrors the list documented on `JumoItem::jumo_kind`. `variant` is the `.mju`
+/// item for a closed set of alternatives; `enum` is accepted as a code-only
+/// spelling that the draft generator projects back onto `state`.
+const JUMO_KINDS: &[&str] = &[
+    "struct",
+    "state",
+    "enum",
+    "variant",
+    "event",
+    "message",
+    "failure",
+    "cap",
+    "actor",
+    "module",
+    "interface",
+    "storage",
+    "command",
+    "dataflow",
+    "lifecycle",
+    "layer",
+    "dependency_rule",
+    "decision",
+    "failure_policy",
+    "flow",
+    "verify",
+    "target",
+];
+
 /// Extract `#[jumo(...)]` attributes from the type-level attribute list.
 ///
 /// Unknown keys and malformed values are hard errors: a silently dropped key
 /// would emit incomplete metadata that no compiler check would ever catch.
 /// `kind` and `domain` are required, because `JumoItem` declares them without a
-/// default and an empty string is not a usable model fact.
+/// default and an empty string is not a usable model fact. `kind` must also name
+/// a known `.mju` item kind, so a typo cannot ship an unusable model fact.
 fn parse_type_attrs(
     attrs: &[syn::Attribute],
     fallback_span: proc_macro2::Span,
@@ -98,6 +129,17 @@ fn parse_type_attrs(
         return Err(syn::Error::new(
             fallback_span,
             format!("`#[jumo(...)]` requires {names}, but the value is empty"),
+        ));
+    }
+
+    if !JUMO_KINDS.contains(&result.kind.as_str()) {
+        return Err(syn::Error::new(
+            fallback_span,
+            format!(
+                "`#[jumo(kind = \"{}\")]` is not a known .mju item kind; expected one of: {}",
+                result.kind,
+                JUMO_KINDS.join(", ")
+            ),
         ));
     }
 
@@ -322,6 +364,33 @@ mod tests {
             .expect_err("empty value must fail");
 
         assert!(message(&err).contains("`kind`"), "{err}");
+    }
+
+    #[test]
+    fn unknown_kind_is_rejected() {
+        let err = parse(parse_quote!(#[jumo(kind = "sturct", domain = "Business")]))
+            .expect_err("unknown kind must fail");
+
+        let rendered = message(&err);
+        assert!(rendered.contains("sturct"), "{err}");
+        assert!(rendered.contains("not a known .mju item kind"), "{err}");
+        // the error must tell the author what is allowed
+        assert!(
+            rendered.contains("struct") && rendered.contains("variant"),
+            "{err}"
+        );
+    }
+
+    #[test]
+    fn every_kind_in_use_is_accepted() {
+        for kind in [
+            "struct", "state", "enum", "variant", "message", "event", "failure",
+        ] {
+            let attr: syn::Attribute = parse_quote!(#[jumo(kind = #kind, domain = "Business")]);
+            let parsed = parse(attr).unwrap_or_else(|err| panic!("kind `{kind}`: {err}"));
+
+            assert_eq!(parsed.kind, kind);
+        }
     }
 
     #[test]

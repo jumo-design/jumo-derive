@@ -15,11 +15,15 @@ pub trait JumoItem {
         None
     }
 
-    /// .mju item kind: `"struct"`, `"state"`, `"event"`, `"message"`,
-    /// `"failure"`, `"cap"`, `"actor"`, `"module"`, `"interface"`,
-    /// `"storage"`, `"command"`, `"dataflow"`, `"lifecycle"`, `"layer"`,
-    /// `"dependency_rule"`, `"decision"`, `"failure_policy"`, `"flow"`,
-    /// `"verify"`, `"target"`.
+    /// .mju item kind: `"struct"`, `"state"`, `"enum"`, `"variant"`,
+    /// `"event"`, `"message"`, `"failure"`, `"cap"`, `"actor"`, `"module"`,
+    /// `"interface"`, `"storage"`, `"command"`, `"dataflow"`, `"lifecycle"`,
+    /// `"layer"`, `"dependency_rule"`, `"decision"`, `"failure_policy"`,
+    /// `"flow"`, `"verify"`, `"target"`.
+    ///
+    /// The derive macro rejects any other value. `"enum"` is a code-only
+    /// spelling: the draft generator projects it back onto `"state"`, so it
+    /// carries no information a `.mju` model could round-trip.
     fn jumo_kind() -> &'static str;
 
     /// Domain name, e.g. `"Business"`, `"Storage"`.
