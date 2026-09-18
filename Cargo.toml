@@ -2,7 +2,7 @@
 members = [".", "jumo-derive-macros"]
 
 [workspace.package]
-version = "0.1.6" #@gxl:set(version)
+version = "0.1.7" #@gxl:set(version)
 edition = "2021"
 license = "Apache-2.0"
 repository = "https://github.com/jumo-design/jumo-derive"
