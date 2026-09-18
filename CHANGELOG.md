@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- A `-dryrun` tag created a real GitHub Release. The guard sat at job level, so
+  it also skipped the job that the publish job depends on; it now sits on the
+  release step, which lets the job run while publishing nothing.
+
+## [0.1.7] — 2026-09-18
+
 ### Added
 
 - **`kind` is validated at compile time.** `#[jumo(kind = "...")]` used to accept
@@ -124,7 +132,8 @@ All notable changes to this project will be documented in this file.
   `jumo_domain()`.
 - CI and release workflows, and a test suite covering struct and enum patterns.
 
-[Unreleased]: https://github.com/jumo-design/jumo-derive/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/jumo-design/jumo-derive/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/jumo-design/jumo-derive/compare/v0.1.6...v0.1.7
 [0.1.6]: https://github.com/jumo-design/jumo-derive/compare/v0.1.5...v0.1.6
 [0.1.5]: https://github.com/jumo-design/jumo-derive/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/jumo-design/jumo-derive/compare/v0.1.3...v0.1.4
